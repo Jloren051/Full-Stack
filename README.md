@@ -147,3 +147,33 @@ Um seller autenticado pode:
 ## 📌 Considerações Finais
 Este projeto fornece um sistema completo para mini mercados gerenciarem seus estoques e vendas com segurança e eficiência. 🚀
 
+
+```
+gest-stock
+├─ docker-compose.yml
+├─ Dockerfile
+├─ README.md
+├─ requirements.txt
+├─ run.py
+└─ src
+   ├─ Application
+   │  ├─ Controllers
+   │  │  ├─ seller_controller.py
+   │  │  └─ user_controller.py
+   │  └─ Service
+   │     ├─ seller_service.py
+   │     └─ user_service.py
+   ├─ config
+   │  └─ data_base.py
+   ├─ Domain
+   │  ├─ seller.py
+   │  └─ user.py
+   ├─ Infrastructure
+   │  ├─ http
+   │  │  └─ whats_app.py
+   │  └─ Model
+   │     ├─ seller.py
+   │     └─ user.py
+   └─ routes.py
+
+```
