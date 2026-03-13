@@ -1,7 +1,7 @@
 Flask>=3.0
-Flask-SQLALchemy>=3.1
+Flask-SQLAlchemy>=3.1
 mysql-connector-python
 Werkzeug>=3.0
-sqlalchemy==1.4.49
+sqlalchemy>=2.0
 flask-jwt-extended
 bcrypt
