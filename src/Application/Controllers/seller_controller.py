@@ -1,8 +1,11 @@
 from flask import request, jsonify, make_response
 from flask_jwt_extended import create_access_token
 from src.Application.Service.seller_service import SellerService
+from src.Application.Controllers.twilio_utils import enviar_codigo_whatsapp
+import random
 
 class SellerController:
+
     @staticmethod
     def register_seller():
         data = request.get_json()
@@ -16,8 +19,14 @@ class SellerController:
             return make_response(jsonify({"erro": "Missing required fields"}), 400)
 
         seller = SellerService.create_seller(name, cnpj, email, password, cell)
+
+        codigo = str(random.randint(1000, 9999))
+        seller.codigo_ativacao = codigo
+
+        enviar_codigo_whatsapp(cell, codigo)
+
         return make_response(jsonify({
-            "mensagem": "Seller salvo com sucesso",
+            "mensagem": "Seller salvo com sucesso! Código enviado via WhatsApp.",
             "Seller": seller.to_dict()
         }), 200)
 
@@ -25,7 +34,6 @@ class SellerController:
     @staticmethod
     def login_seller():
         data = request.get_json()
-
         email = data.get("email")
         password = data.get("senha")
 
