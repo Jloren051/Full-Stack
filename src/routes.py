@@ -6,18 +6,15 @@ from src.Application.Controllers.product_controller import ProductController
 from src.Application.Controllers.sale_controller import SaleController
 
 def init_routes(app):
-    # ===================== Health Check =====================
     @app.route('/api', methods=['GET'])
     def health():
         return make_response(jsonify({"mensagem": "API - OK; Docker - Up"}), 200)
 
-    # ===================== Usuário =====================
     @app.route('/user', methods=['POST'])
     def register_user():
         controller = UserController()
         return controller.register_user()
 
-    # ===================== Seller =====================
     @app.route('/api/sellers', methods=['POST'])
     def register_seller():
         controller = SellerController()
@@ -33,7 +30,6 @@ def init_routes(app):
         controller = SellerController()
         return controller.login_seller()
 
-    # ===================== Produtos =====================
     @app.route('/api/products', methods=['POST'])
     def create_product():
         controller = ProductController()
@@ -59,7 +55,6 @@ def init_routes(app):
         controller = ProductController()
         return controller.inactivate_product(product_id)
 
-    # ===================== Vendas =====================
     @app.route("/api/sales", methods=["POST"])
     def create_sale():
         controller = SaleController()

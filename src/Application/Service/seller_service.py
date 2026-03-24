@@ -20,7 +20,7 @@ class SellerService:
     def authenticate_seller(email, senha):
         return SellerModel.query.filter_by(email=email, senha=senha).first()
 
-    # 🔹 Adicione este método
+   
     @staticmethod
     def get_by_cell(celular):
         return SellerModel.query.filter_by(celular=celular).first()

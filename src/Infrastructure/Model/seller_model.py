@@ -9,7 +9,7 @@ class SellerModel(db.Model):
     email = db.Column(db.String(120), nullable=False, unique=True)
     senha = db.Column(db.String(120), nullable=False)
     celular = db.Column(db.String(20), nullable=False, unique=True)
-    status = db.Column(db.String(20), default="pendente")  # pendente / ativo
+    status = db.Column(db.String(20), default="pendente")  
     codigo_ativacao = db.Column(db.String(10), nullable=True)
 
     products = db.relationship("ProductModel", backref="seller", lazy=True)

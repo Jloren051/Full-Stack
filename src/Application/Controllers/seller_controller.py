@@ -19,29 +19,26 @@ class SellerController:
         password = data.get('senha')
         cell = data.get('celular')
 
-        # Validação
+        
         if not name or not cnpj or not email or not password or not cell:
             return make_response(jsonify({"erro": "Campos obrigatórios"}), 400)
 
-        # Cria seller
         seller = SellerService.create_seller(name, cnpj, email, password, cell)
 
-        # Gera código
+
         codigo = str(random.randint(1000, 9999))
         seller.codigo_ativacao = codigo
 
-        # Salva código no banco
+ 
         db.session.commit()
 
-        # Envia WhatsApp
+
         enviar_codigo_whatsapp(cell, codigo)
 
         return make_response(jsonify({
             "mensagem": "Seller salvo com sucesso! Código enviado via WhatsApp.",
             "seller": seller.to_dict()
         }), 200)
-
-    # -----------------------------
 
     @staticmethod
     def activate_seller():
@@ -61,7 +58,6 @@ class SellerController:
         if seller.codigo_ativacao != codigo:
             return make_response(jsonify({"erro": "Código inválido"}), 400)
 
-        # Ativa seller
         seller.status = "ativo"
 
         db.session.commit()
@@ -69,8 +65,6 @@ class SellerController:
         return make_response(jsonify({
             "mensagem": "Seller ativado com sucesso!"
         }), 200)
-
-    # -----------------------------
 
     @staticmethod
     def login_seller():
