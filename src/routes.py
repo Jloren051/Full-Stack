@@ -1,5 +1,6 @@
 # src/routes.py
 from flask import jsonify, make_response
+from flask_jwt_extended import jwt_required
 from src.Application.Controllers.user_controller import UserController
 from src.Application.Controllers.seller_controller import SellerController
 from src.Application.Controllers.product_controller import ProductController
@@ -29,6 +30,11 @@ def init_routes(app):
     def login_seller():
         controller = SellerController()
         return controller.login_seller()
+    
+    @app.route('/api/sellers/me', methods=['PUT'])
+    @jwt_required()
+    def update_seller():
+        return SellerController.update_seller()
 
     @app.route('/api/products', methods=['POST'])
     def create_product():

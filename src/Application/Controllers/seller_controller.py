@@ -1,5 +1,5 @@
 from flask import request, jsonify, make_response
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from src.Application.Service.seller_service import SellerService
 from src.Infrastructure.Model.seller_model import SellerModel
 from src.Application.Controllers.twilio_utils import enviar_codigo_whatsapp
@@ -90,4 +90,20 @@ class SellerController:
             "mensagem": "Login realizado com sucesso",
             "token": token,
             "seller": seller.to_dict()
+        }), 200)
+   
+    @staticmethod
+    @jwt_required()
+    def update_seller():
+        current_id = get_jwt_identity()
+        data = request.get_json()
+        if not data:
+            return make_response(jsonify({"erro": "Dados para atualização não fornecidos"}), 400)
+
+        update_seller = SellerService.update_seller(current_id, data)
+        if not update_seller:
+            return make_response(jsonify({"erro": "não foi possível atualizar os dados"}), 400)
+        return make_response(jsonify({
+            "mensagem": "perfil atualizado!",
+            "seller": update_seller.to_dict()
         }), 200)

@@ -10,10 +10,8 @@ def create_app():
     """
     app = Flask(__name__)
 
-    # chave usada para gerar os tokens
     app.config["JWT_SECRET_KEY"] = "super-secret-key"
 
-    # inicializa o JWT
     jwt = JWTManager(app)
 
     init_db(app)
