@@ -6,9 +6,7 @@ class ProductService:
 
     @staticmethod
     def create(data, seller_id):
-        """
-        Cria um novo produto para o seller autenticado
-        """
+        
         product = ProductModel(
             nome=data["nome"],
             preco=data["preco"],

@@ -68,13 +68,13 @@ Um seller autenticado pode:
 ### 1️⃣ Cadastro e Ativação do Seller
 - **Criar Seller**
   ```bash
-  curl -X POST "http://localhost:8080/api/sellers" \
+  curl -X POST "http://localhost:5000/api/sellers" \
        -H "Content-Type: application/json" \
        -d '{"nome": "Mini Mercado X", "cnpj": "00.000.000/0001-00", "email": "mercado@email.com", "celular": "+559999999999", "senha": "123456"}'
   ```
 - **Ativar Seller via WhatsApp (Twilio)**
   ```bash
-  curl -X POST "http://localhost:8080/api/sellers/activate" \
+  curl -X POST "http://localhost:5000/api/sellers/activate" \
        -H "Content-Type: application/json" \
        -d '{"celular": "+559999999999", "codigo": "1234"}'
   ```
@@ -82,7 +82,7 @@ Um seller autenticado pode:
 ### 2️⃣ Autenticação
 - **Login**
   ```bash
-  curl -X POST "http://localhost:8080/api/auth/login" \
+  curl -X POST "http://localhost:5000/api/auth/login" \
        -H "Content-Type: application/json" \
        -d '{"email": "mercado@email.com", "senha": "123456"}'
   ```
@@ -90,7 +90,7 @@ Um seller autenticado pode:
 ### 3️⃣ Gerenciamento de Produtos
 - **Cadastrar Produto**
   ```bash
-  curl -X POST "http://localhost:8080/api/products" \
+  curl -X POST "http://localhost:5000/api/products" \
        -H "Authorization: Bearer SEU_TOKEN" \
        -H "Content-Type: application/json" \
        -d '{"nome": "Arroz", "preco": 10.50, "quantidade": 100, "status": "Ativo", "img": "url_da_imagem"}'

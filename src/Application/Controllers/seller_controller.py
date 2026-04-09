@@ -11,44 +11,53 @@ class SellerController:
 
     @staticmethod
     def register_seller():
-        data = request.get_json()
+        try:
+            data = request.get_json()
 
-        name = data.get('nome')
-        cnpj = data.get('cnpj')
-        email = data.get('email')
-        password = data.get('senha')
-        cell = data.get('celular')
+            name = data.get('nome')
+            cnpj = data.get('cnpj')
+            email = data.get('email')
+            password = data.get('senha')
+            cell = data.get('celular')
 
-        
-        if not name or not cnpj or not email or not password or not cell:
-            return make_response(jsonify({"erro": "Campos obrigatórios"}), 400)
+            
+            if not name or not cnpj or not email or not password or not cell:
+                return make_response(jsonify({"erro": "Campos obrigatórios"}), 400)
 
-        seller = SellerService.create_seller(name, cnpj, email, password, cell)
-
-
-        codigo = str(random.randint(1000, 9999))
-        seller.codigo_ativacao = codigo
-
- 
-        db.session.commit()
+            seller = SellerService.create_seller(name, cnpj, email, password, cell)
 
 
-        enviar_codigo_whatsapp(cell, codigo)
+            codigo = str(random.randint(1000, 9999))
+            seller.codigo_ativacao = codigo
 
-        return make_response(jsonify({
-            "mensagem": "Seller salvo com sucesso! Código enviado via WhatsApp.",
-            "seller": seller.to_dict()
-        }), 200)
+     
+            db.session.commit()
+
+
+            enviar_codigo_whatsapp(cell, codigo)
+
+            return make_response(jsonify({
+                "mensagem": "Seller salvo com sucesso! Código enviado via WhatsApp.",
+                "seller": seller.to_dict()
+            }), 200)
+        except Exception as e:
+            print(f"Erro no cadastro de seller: {str(e)}")
+            return make_response(jsonify({"erro": "Erro interno", "detalhes": str(e)}), 500)
 
     @staticmethod
     def activate_seller():
-        data = request.get_json()
+        try:
+            data = request.get_json()
+            if not data:
+                return make_response(jsonify({"erro": "Corpo da requisição não pode ser vazio"}), 400)
+        except Exception:
+            return make_response(jsonify({"erro": "JSON inválido"}), 400)
 
         celular = data.get("celular")
         codigo = data.get("codigo")
 
         if not celular or not codigo:
-            return make_response(jsonify({"erro": "Dados obrigatórios"}), 400)
+            return make_response(jsonify({"erro": "Campos 'celular' e 'codigo' são obrigatórios"}), 400)
 
         seller = SellerService.get_by_cell(celular)
 
@@ -71,12 +80,12 @@ class SellerController:
         data = request.get_json()
 
         email = data.get("email")
-        password = data.get("senha")
+        senha = data.get("senha")
 
-        if not email or not password:
+        if not email or not senha:
             return make_response(jsonify({"erro": "Email e senha são obrigatórios"}), 400)
 
-        seller = SellerService.authenticate_seller(email, password)
+        seller = SellerService.authenticate_seller(email, senha)
 
         if not seller:
             return make_response(jsonify({"erro": "Email ou senha inválidos"}), 401)
@@ -84,7 +93,7 @@ class SellerController:
         if seller.status != "ativo":
             return make_response(jsonify({"erro": "Seller ainda não ativado"}), 403)
 
-        token = create_access_token(identity=seller.id)
+        token = create_access_token(identity=str(seller.id))
 
         return make_response(jsonify({
             "mensagem": "Login realizado com sucesso",
@@ -95,15 +104,28 @@ class SellerController:
     @staticmethod
     @jwt_required()
     def update_seller():
-        current_id = get_jwt_identity()
-        data = request.get_json()
-        if not data:
-            return make_response(jsonify({"erro": "Dados para atualização não fornecidos"}), 400)
+        try:
+            current_id = get_jwt_identity()
+            data = request.get_json()
 
-        update_seller = SellerService.update_seller(current_id, data)
-        if not update_seller:
-            return make_response(jsonify({"erro": "não foi possível atualizar os dados"}), 400)
-        return make_response(jsonify({
-            "mensagem": "perfil atualizado!",
-            "seller": update_seller.to_dict()
-        }), 200)
+            if not data:
+                return make_response(jsonify({"erro": "Corpo da requisição não pode ser vazio"}), 400)
+
+            # Validar campos permitidos
+            campos_permitidos = ['nome', 'email', 'celular']
+            for campo in data.keys():
+                if campo not in campos_permitidos:
+                    return make_response(jsonify({"erro": f"Campo '{campo}' não é permitido"}), 400)
+
+            update_seller = SellerService.update_seller(current_id, data)
+            if not update_seller:
+                return make_response(jsonify({"erro": "Seller não encontrado"}), 404)
+
+            return make_response(jsonify({
+                "mensagem": "perfil atualizado!",
+                "seller": update_seller.to_dict()
+            }), 200)
+
+        except Exception as e:
+            print(f"Erro no update: {str(e)}")
+            return make_response(jsonify({"erro": "Erro interno", "detalhes": str(e)}), 500)

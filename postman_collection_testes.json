@@ -1,0 +1,268 @@
+{
+  "info": {
+    "name": "Market Management API - Testes Completos",
+    "description": "Coleção completa para testar a API de gerenciamento de mercado",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api"]
+        }
+      }
+    },
+    {
+      "name": "2. Cadastrar Seller",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Minha Loja\",\n  \"cnpj\": \"12345678000100\",\n  \"email\": \"loja@email.com\",\n  \"senha\": \"senha123\",\n  \"celular\": \"11999999999\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/sellers",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "sellers"]
+        }
+      }
+    },
+    {
+      "name": "3. Ativar Seller (usar código do WhatsApp)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"celular\": \"11999999999\",\n  \"codigo\": \"XXXX\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/sellers/activate",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "sellers", "activate"]
+        }
+      }
+    },
+    {
+      "name": "4. Login Seller",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"loja@email.com\",\n  \"senha\": \"senha123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "auth", "login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    const response = pm.response.json();",
+              "    pm.collectionVariables.set('jwt_token', response.token);",
+              "    console.log('Token salvo:', response.token.substring(0, 50) + '...');",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Atualizar Perfil Seller",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Minha Loja Atualizada\",\n  \"email\": \"loja.atualizada@email.com\",\n  \"celular\": \"11988888888\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/sellers/me",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "sellers", "me"]
+        }
+      }
+    },
+    {
+      "name": "6. Cadastrar Produto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Arroz Branco\",\n  \"preco\": 25.90,\n  \"quantidade\": 100,\n  \"status\": \"ativo\",\n  \"img\": \"https://exemplo.com/arroz.jpg\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "products"]
+        }
+      }
+    },
+    {
+      "name": "7. Listar Produtos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/products",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "products"]
+        }
+      }
+    },
+    {
+      "name": "8. Buscar Produto por ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/products/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "products", "1"]
+        }
+      }
+    },
+    {
+      "name": "9. Atualizar Produto",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Arroz Branco Premium\",\n  \"preco\": 28.90,\n  \"quantidade\": 80,\n  \"status\": \"ativo\",\n  \"img\": \"https://exemplo.com/arroz-premium.jpg\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/products/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "products", "1"]
+        }
+      }
+    },
+    {
+      "name": "10. Inativar Produto",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/api/products/1/inactivate",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "products", "1", "inactivate"]
+        }
+      }
+    },
+    {
+      "name": "11. Criar Venda",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"produtos\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 2\n    }\n  ],\n  \"valor_total\": 51.80\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/sales",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "sales"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

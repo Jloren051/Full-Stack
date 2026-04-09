@@ -20,9 +20,6 @@ class ProductController:
         except Exception as e:
             return jsonify({"erro": "JSON inválido", "detalhe": str(e)}), 422
 
-        # debug: imprime no console o JSON recebido
-        print("Recebido:", data)
-
         # validação dos campos obrigatórios
         if not data or not data.get("nome") or not data.get("preco") or not data.get("quantidade"):
             return jsonify({"erro": "Campos obrigatórios: nome, preco, quantidade"}), 400
@@ -38,14 +35,7 @@ class ProductController:
         """
         seller_id = get_jwt_identity()
         products = ProductService.list(seller_id)
-        return jsonify([{
-            "id": p.id,
-            "nome": p.nome,
-            "preco": p.preco,
-            "quantidade": p.quantidade,
-            "status": p.status,
-            "imagem": p.imagem
-        } for p in products]), 200
+        return jsonify([p.to_dict() for p in products]), 200
 
     @staticmethod
     @jwt_required()
@@ -58,14 +48,7 @@ class ProductController:
         if not product:
             return jsonify({"erro": "Produto não encontrado"}), 404
 
-        return jsonify({
-            "id": product.id,
-            "nome": product.nome,
-            "preco": product.preco,
-            "quantidade": product.quantidade,
-            "status": product.status,
-            "imagem": product.imagem
-        }), 200
+        return jsonify(product.to_dict()), 200
 
     @staticmethod
     @jwt_required()
@@ -84,7 +67,7 @@ class ProductController:
             return jsonify({"erro": "Produto não encontrado"}), 404
 
         ProductService.update(product, data)
-        return jsonify({"mensagem": "Produto atualizado com sucesso"}), 200
+        return jsonify({"mensagem": "Produto atualizado com sucesso", "produto": product.to_dict()}), 200
 
     @staticmethod
     @jwt_required()

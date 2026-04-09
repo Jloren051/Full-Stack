@@ -5,3 +5,8 @@ Werkzeug>=3.0
 sqlalchemy>=2.0
 flask-jwt-extended
 bcrypt
+twilio
+python-dotenv
+flask-cors
+pydantic
+alembic
