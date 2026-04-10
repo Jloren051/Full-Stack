@@ -7,36 +7,38 @@ from src.config.data_base import db
 class SaleService:
 
     @staticmethod
-    def create(data, seller_id):
-        
-        seller = SellerModel.query.get(seller_id)
-        if not seller or seller.status != "ativo":
-            raise Exception("Seller inativo ou não encontrado")
+    def create(product_id: int, quantity: int, seller_id: str):
+        try:
+            seller_id_int = int(seller_id)
 
-     
-        product = ProductModel.query.get(data["produtoId"])
-        if not product:
-            raise Exception("Produto não encontrado")
-        if product.seller_id != seller_id:
-            raise Exception("Produto não pertence ao seller")
-        if product.status != "ativo":
-            raise Exception("Produto inativo")
-        if data["quantidade"] > product.quantidade:
-            raise Exception("Quantidade maior que o estoque disponível")
+            seller = SellerModel.query.get(seller_id_int)
+            if not seller or seller.status != "ativo":
+                raise ValueError("Vendedor inativo ou não encontrado")
 
-        
-        sale = SaleModel(
-            product_id=product.id,
-            seller_id=seller_id,
-            quantidade=data["quantidade"],
-            preco_venda=product.preco
-        )
+            # Combina a busca do produto com a verificação de propriedade em uma única consulta
+            product = ProductModel.query.filter_by(id=product_id, seller_id=seller_id_int).first()
+            if not product:
+                raise ValueError("Produto não encontrado ou não pertence a este vendedor.")
+            if product.status != "ativo":
+                raise ValueError("Produto inativo não pode ser vendido")
+            if quantity > product.quantidade:
+                raise ValueError(f"Estoque insuficiente. Disponível: {product.quantidade}")
 
-        
-        product.quantidade -= data["quantidade"]
+            
+            sale = SaleModel(
+                product_id=product.id,
+                seller_id=seller_id_int,
+                quantidade=quantity,
+                preco_venda=product.preco
+            )
 
-        
-        db.session.add(sale)
-        db.session.commit()
+            product.quantidade -= quantity
 
-        return sale
+            
+            db.session.add(sale)
+            db.session.commit()
+
+            return sale
+        except Exception:
+            db.session.rollback()
+            raise # Re-raise a exceção para ser tratada pelo controller
