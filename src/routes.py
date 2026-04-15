@@ -5,6 +5,7 @@ from src.Application.Controllers.user_controller import UserController
 from src.Application.Controllers.seller_controller import SellerController
 from src.Application.Controllers.product_controller import ProductController
 from src.Application.Controllers.sale_controller import SaleController
+from src.Application.Controllers.dashboard_controller import DashboardController
 
 def init_routes(app):
     @app.route('/api', methods=['GET'])
@@ -66,3 +67,13 @@ def init_routes(app):
     @jwt_required()
     def create_sale():
         return SaleController.create()
+
+    @app.route("/api/sales", methods=["GET"])
+    @jwt_required()
+    def list_sales():
+        return SaleController.list_sales()
+
+    @app.route("/api/dashboard", methods=["GET"])
+    @jwt_required()
+    def get_dashboard():
+        return DashboardController.get_indicators()

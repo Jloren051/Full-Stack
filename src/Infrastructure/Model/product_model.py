@@ -10,6 +10,9 @@ class ProductModel(db.Model):
     status = db.Column(db.String(20), default="ativo", nullable=False)
     imagem = db.Column(db.String(255), nullable=True)
     seller_id = db.Column(db.Integer, db.ForeignKey("sellers.id"), nullable=False)
+    
+    # Relação com vendas
+    sales = db.relationship("SaleModel", backref="product", lazy=True)
 
     def to_dict(self):
         return {

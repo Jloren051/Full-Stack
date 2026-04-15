@@ -31,3 +31,13 @@ class SaleController:
         except Exception as e:
             # Outros erros inesperados retornam 500
             return make_response(jsonify({"erro": "Erro interno ao processar a venda", "detalhes": str(e)}), 500)
+
+    @staticmethod
+    @jwt_required()
+    def list_sales():
+        try:
+            seller_id = int(get_jwt_identity())
+            sales = SaleService.list_by_seller(seller_id)
+            return make_response(jsonify(sales), 200)
+        except Exception as e:
+            return make_response(jsonify({"erro": str(e)}), 500)

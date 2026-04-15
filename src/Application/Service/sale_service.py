@@ -41,4 +41,9 @@ class SaleService:
             return sale
         except Exception:
             db.session.rollback()
-            raise # Re-raise a exceção para ser tratada pelo controller
+            raise 
+
+    @staticmethod
+    def list_by_seller(seller_id: int):
+        sales = SaleModel.query.filter_by(seller_id=seller_id).order_by(SaleModel.created_at.desc()).all()
+        return [sale.to_dict() for sale in sales]

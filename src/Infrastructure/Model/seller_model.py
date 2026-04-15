@@ -14,7 +14,7 @@ class SellerModel(db.Model):
 
     # Relações que permitem acessar os produtos e vendas de um vendedor.
     products = db.relationship("ProductModel", backref="seller", lazy=True)
-    sales = db.relationship("SaleModel", backref=db.backref("sales", lazy=True))
+    sales = db.relationship("SaleModel", backref="seller_owner", lazy=True)
 
     def to_dict(self):
         return {

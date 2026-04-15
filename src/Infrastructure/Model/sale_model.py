@@ -10,9 +10,7 @@ class SaleModel(db.Model):
     preco_venda = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
-    # Relações para facilitar queries. O backref cria a coluna virtual 'sales' em ProductModel e SellerModel.
-    product = db.relationship("ProductModel", backref=db.backref("sales", lazy=True))
-    seller = db.relationship("SellerModel", backref=db.backref("sales", lazy=True))
+    # O backref no SellerModel e ProductModel cria as propriedades virtuais automaticamente.
 
     def to_dict(self):
         return {

@@ -14,10 +14,24 @@ def create_app():
 
     # Chave JWT com 64+ caracteres (segura conforme RFC 7518)
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "sua-chave-secreta-muito-segura-com-mais-de-32-caracteres-aleatorios")
+    app.config["JWT_HEADER_NAME"] = "Authorization"
+    app.config["JWT_HEADER_TYPE"] = "Bearer"
 
     CORS(app)
 
     jwt = JWTManager(app)
+
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        return {"erro": "A sessão expirou", "detalhes": "Por favor, faça login novamente."}, 401
+
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        return {"erro": "Token inválido", "detalhes": "O token de autenticação é inválido ou está malformado."}, 422
+
+    @jwt.unauthorized_loader
+    def missing_token_callback(error):
+        return {"erro": "Autenticação necessária", "detalhes": "O cabeçalho de autorização está ausente."}, 401
 
     init_db(app)
 
