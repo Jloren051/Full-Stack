@@ -53,3 +53,12 @@ class ProductService:
         product.status = "inativo"
         db.session.commit()
         return product
+
+    @staticmethod
+    def activate(product):
+        """
+        Marca o produto como ativo
+        """
+        product.status = "ativo"
+        db.session.commit()
+        return product

@@ -64,6 +64,9 @@ export default function Dashboard() {
           <button className="btn btn-secondary" onClick={() => window.location.href='/vendas/nova'}>
             Registrar Venda
           </button>
+          <button className="btn btn-secondary" onClick={() => window.location.href='/perfil'}>
+            Configurações do Mercado
+          </button>
         </div>
       </section>
     </div>

@@ -40,6 +40,8 @@ class SellerController:
                 "mensagem": "Seller salvo com sucesso! Código enviado via WhatsApp.",
                 "seller": seller.to_dict()
             }), 200)
+        except ValueError as e:
+            return make_response(jsonify({"erro": str(e)}), 400)
         except Exception as e:
             print(f"Erro no cadastro de seller: {str(e)}")
             return make_response(jsonify({"erro": "Erro interno", "detalhes": str(e)}), 500)
@@ -112,7 +114,7 @@ class SellerController:
                 return make_response(jsonify({"erro": "Corpo da requisição não pode ser vazio"}), 400)
 
             # Validar campos permitidos
-            campos_permitidos = ['nome', 'email', 'celular']
+            campos_permitidos = ['nome', 'email', 'celular', 'cnpj', 'senha']
             for campo in data.keys():
                 if campo not in campos_permitidos:
                     return make_response(jsonify({"erro": f"Campo '{campo}' não é permitido"}), 400)
@@ -126,6 +128,20 @@ class SellerController:
                 "seller": update_seller.to_dict()
             }), 200)
 
+        except ValueError as e:
+            return make_response(jsonify({"erro": str(e)}), 400)
         except Exception as e:
             print(f"Erro no update: {str(e)}")
+            return make_response(jsonify({"erro": "Erro interno", "detalhes": str(e)}), 500)
+
+    @staticmethod
+    @jwt_required()
+    def get_me():
+        try:
+            current_id = get_jwt_identity()
+            seller = SellerService.get_by_id(current_id)
+            if not seller:
+                return make_response(jsonify({"erro": "Seller não encontrado"}), 404)
+            return make_response(jsonify(seller.to_dict()), 200)
+        except Exception as e:
             return make_response(jsonify({"erro": "Erro interno", "detalhes": str(e)}), 500)

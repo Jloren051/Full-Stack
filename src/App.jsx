@@ -5,6 +5,7 @@ import Login from "./pages/Login.jsx";
 import RegisterSeller from "./pages/RegisterSeller.jsx";
 import ActivateSeller from "./pages/ActivateSeller.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Profile from "./pages/Profile.jsx";
 
 import ProductList from "./pages/Products/List.jsx";
 import CreateProduct from "./pages/Products/Create.jsx";
@@ -30,6 +31,7 @@ function App() {
         {/* Privadas */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/perfil" element={<Profile />} />
 
           <Route path="/produtos" element={<ProductList />} />
           <Route path="/produtos/novo" element={<CreateProduct />} />

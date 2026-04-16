@@ -25,7 +25,7 @@ export default function RegisterSeller() {
       alert("Cadastro realizado! Verifique seu código de ativação no WhatsApp.");
       navigate("/activate");
     } catch (err) {
-      const errorMsg = err.response?.data?.detalhes || err.response?.data?.erro || "Erro ao realizar cadastro.";
+      const errorMsg = err.response?.data?.erro || "Erro ao realizar cadastro. Tente novamente.";
       setError(errorMsg);
     } finally {
       setLoading(false);

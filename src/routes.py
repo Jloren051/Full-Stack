@@ -33,6 +33,11 @@ def init_routes(app):
         """Alias para /api/sellers/login"""
         return SellerController.login_seller()
     
+    @app.route('/api/sellers/me', methods=['GET'])
+    @jwt_required()
+    def get_seller():
+        return SellerController.get_me()
+
     @app.route('/api/sellers/me', methods=['PUT'])
     @jwt_required()
     def update_seller():
@@ -62,6 +67,11 @@ def init_routes(app):
     @jwt_required()
     def inactivate_product(product_id):
         return ProductController.inactivate_product(product_id)
+
+    @app.route('/api/products/<int:product_id>/activate', methods=['PATCH'])
+    @jwt_required()
+    def activate_product(product_id):
+        return ProductController.activate_product(product_id)
 
     @app.route("/api/sales", methods=["POST"])
     @jwt_required()

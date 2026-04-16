@@ -32,6 +32,16 @@ export default function ProductList() {
     }
   }
 
+  async function handleActivate(id) {
+    if (!confirm("Deseja reativar este produto?")) return;
+    try {
+      await api.patch(`/api/products/${id}/activate`);
+      loadProducts();
+    } catch (err) {
+      alert("Erro ao ativar produto.");
+    }
+  }
+
   return (
     <div className="container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -76,9 +86,13 @@ export default function ProductList() {
                         <Link to={`/produtos/${product.id}`} className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
                           Editar
                         </Link>
-                        {product.status === 'ativo' && (
+                        {product.status === 'ativo' ? (
                           <button onClick={() => handleInactivate(product.id)} className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', color: '#ef4444' }}>
                             Inativar
+                          </button>
+                        ) : (
+                          <button onClick={() => handleActivate(product.id)} className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
+                            Ativar
                           </button>
                         )}
                       </div>

@@ -82,3 +82,17 @@ class ProductController:
 
         ProductService.inactivate(product)
         return jsonify({"mensagem": "Produto inativado com sucesso"}), 200
+
+    @staticmethod
+    @jwt_required()
+    def activate_product(product_id):
+        """
+        Ativa um produto inativado.
+        """
+        seller_id = get_jwt_identity()
+        product = ProductService.get(product_id, seller_id)
+        if not product:
+            return jsonify({"erro": "Produto não encontrado"}), 404
+
+        ProductService.activate(product)
+        return jsonify({"mensagem": "Produto ativado com sucesso"}), 200
