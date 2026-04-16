@@ -24,7 +24,7 @@ export default function Profile() {
             email: data.email || "",
             celular: data.celular || "",
             cnpj: data.cnpj || "",
-            senha: "" // Don't show the password
+            senha: ""
         });
       } catch (err) {
         console.error("Erro ao carregar perfil", err);
@@ -43,11 +43,11 @@ export default function Profile() {
 
     try {
       const payload = { ...formData };
-      if (!payload.senha) delete payload.senha; // Don't send empty password
+      if (!payload.senha) delete payload.senha;
 
       await api.put("/api/sellers/me", payload);
-      setMessage({ text: "Perfil atualizado com sucesso!", type: "success" });
-      setFormData(prev => ({ ...prev, senha: "" })); // Clear password field
+      setMessage({ text: "Perfil atualizado com sucesso! ✨", type: "success" });
+      setFormData(prev => ({ ...prev, senha: "" }));
     } catch (err) {
       console.error("Erro ao salvar", err);
       const errorMsg = err.response?.data?.erro || "Erro ao atualizar perfil.";
@@ -57,19 +57,20 @@ export default function Profile() {
     }
   }
 
-  if (loading) return <div className="container">Carregando dados...</div>;
+  if (loading) return <div className="container animate-in">Carregando dados...</div>;
 
   return (
-    <div className="container" style={{ maxWidth: '800px' }}>
-      <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.025em' }}>
-            Dados do <span style={{ color: 'var(--primary)' }}>Mercado</span>
-        </h1>
+    <div className="container animate-in" style={{ maxWidth: '900px' }}>
+      <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
+        <p style={{ color: 'var(--primary)', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
+          Configurações
+        </p>
+        <h1 style={{ marginBottom: '0.5rem' }}>Dados do <span style={{ color: 'var(--primary)' }}>Mercado</span></h1>
         <p style={{ color: 'var(--text-muted)' }}>Mantenha as informações do seu negócio atualizadas.</p>
       </header>
 
       {message.text && (
-        <div className={`badge badge-${message.type}`} style={{ width: '100%', padding: '1rem', marginBottom: '1.5rem', textAlign: 'center', fontSize: '1rem' }}>
+        <div className={`badge badge-${message.type}`} style={{ width: '100%', padding: '1.25rem', marginBottom: '2rem', textAlign: 'center', fontSize: '1rem', borderRadius: '12px', border: '1px solid currentColor' }}>
           {message.text}
         </div>
       )}
@@ -83,6 +84,7 @@ export default function Profile() {
               value={formData.nome} 
               onChange={e => setFormData({...formData, nome: e.target.value})} 
               required 
+              placeholder="Nome da sua loja"
             />
           </div>
 
@@ -93,6 +95,7 @@ export default function Profile() {
               value={formData.cnpj} 
               onChange={e => setFormData({...formData, cnpj: e.target.value})} 
               required 
+              placeholder="00.000.000/0001-00"
             />
           </div>
 
@@ -103,6 +106,7 @@ export default function Profile() {
               value={formData.email} 
               onChange={e => setFormData({...formData, email: e.target.value})} 
               required 
+              placeholder="seu@email.com"
             />
           </div>
 
@@ -113,11 +117,16 @@ export default function Profile() {
               value={formData.celular} 
               onChange={e => setFormData({...formData, celular: e.target.value})} 
               required 
+              placeholder="+55 11 99999-9999"
             />
           </div>
 
           <div className="form-group form-grid-full">
-            <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '0.5rem 0' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', margin: '1rem 0' }}>
+               <div style={{ flex: 1, height: '1px', background: 'var(--border-light)' }}></div>
+               <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Segurança</span>
+               <div style={{ flex: 1, height: '1px', background: 'var(--border-light)' }}></div>
+            </div>
           </div>
 
           <div className="form-group form-grid-full" style={{ maxWidth: '500px', margin: '0 auto', width: '100%' }}>
@@ -128,19 +137,32 @@ export default function Profile() {
               onChange={e => setFormData({...formData, senha: e.target.value})} 
               autoComplete="new-password"
               style={{ textAlign: 'center' }}
+              placeholder="••••••••"
             />
           </div>
 
-          <div className="form-grid-full" style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-            <button type="submit" className="btn btn-primary" disabled={saving} style={{ flex: 1 }}>
-              {saving ? "Salvando..." : "Salvar Alterações"}
+          <div className="form-grid-full" style={{ display: 'flex', gap: '1.25rem', marginTop: '1.5rem' }}>
+            <button type="submit" className="btn btn-primary" disabled={saving} style={{ flex: 2 }}>
+              {saving ? (
+                <>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 2s linear infinite' }}><path d="M21 12a9 9 0 1 1-6.21-8.58"></path></svg>
+                  Salvando Dados...
+                </>
+              ) : "Salvar Alterações"}
             </button>
-            <Link to="/dashboard" className="btn btn-secondary">
-              Voltar
+            <Link to="/dashboard" className="btn btn-secondary" style={{ flex: 1 }}>
+              Cancelar
             </Link>
           </div>
         </form>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
