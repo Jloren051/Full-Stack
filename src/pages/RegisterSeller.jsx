@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -14,6 +14,13 @@ export default function RegisterSeller() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   async function handleRegister(e) {
     e.preventDefault();

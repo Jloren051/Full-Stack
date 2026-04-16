@@ -62,6 +62,39 @@ Um seller autenticado pode:
 - Sellers inativos não podem realizar vendas.
 
 ---
+## 🏃 Como Executar o Projeto
+
+O projeto é dividido em duas partes: o **Backend** (API em Python/Flask) e o **Frontend** (Interface em React). Você precisa executar ambos simultaneamente em terminais separados.
+
+### 1. Backend (API)
+
+1.  Abra um terminal na pasta raiz do projeto (`C:\Users\Erick\Desktop\Full-Stack`).
+2.  Crie e ative um ambiente virtual (recomendado):
+    ```bash
+    python -m venv venv
+    # Windows
+    .\venv\Scripts\activate
+    # macOS/Linux
+    # source venv/bin/activate
+    ```
+3.  Instale as dependências do Python:
+    ```bash
+    pip install -r requirements.txt
+    ```
+4.  Inicie o servidor do backend:
+    ```bash
+    python run.py
+    ```
+5.  O backend estará rodando em `http://127.0.0.1:5000`.
+
+### 2. Frontend (React UI)
+
+1.  Abra um **novo** terminal.
+2.  Navegue até a pasta que contém o projeto frontend: `cd src`
+3.  Instale as dependências do Node.js: `npm install`
+4.  Inicie o servidor de desenvolvimento do React: `npm run dev`
+5.  O frontend estará disponível no endereço informado no terminal (geralmente `http://localhost:5173`). Abra este link no seu navegador.
+---
 
 ## 📡 Endpoints da API
 
@@ -82,7 +115,7 @@ Um seller autenticado pode:
 ### 2️⃣ Autenticação
 - **Login**
   ```bash
-  curl -X POST "http://localhost:5000/api/auth/login" \
+  curl -X POST "http://localhost:5000/api/sellers/login" \
        -H "Content-Type: application/json" \
        -d '{"email": "mercado@email.com", "senha": "123456"}'
   ```
