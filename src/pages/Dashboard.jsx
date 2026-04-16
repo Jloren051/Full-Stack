@@ -66,55 +66,6 @@ export default function Dashboard() {
           </button>
         </div>
       </section>
-
-      <section style={{ marginTop: '4rem', padding: '2rem', backgroundColor: 'rgba(21, 101, 192, 0.05)', borderRadius: '16px', border: '1px dashed var(--primary)' }}>
-        <h3 style={{ marginBottom: '0.5rem', color: 'var(--primary)' }}>Chave de Autenticação (Token JWT)</h3>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-          Esta é a sua chave de acesso exigida para requisições manuais ao projeto.
-        </p>
-        
-        <div style={{ position: 'relative' }}>
-          <textarea 
-            readOnly 
-            value={localStorage.getItem("token") || "Token não encontrado. Faça login novamente."}
-            style={{ 
-              width: '100%', 
-              height: '80px', 
-              padding: '1rem', 
-              borderRadius: '8px', 
-              border: '1px solid #ddd', 
-              fontSize: '0.75rem', 
-              fontFamily: 'monospace',
-              backgroundColor: '#fff',
-              color: '#666',
-              resize: 'none'
-            }}
-          />
-          <button 
-            onClick={() => {
-              navigator.clipboard.writeText(localStorage.getItem("token"));
-              alert("Token copiado para a área de transferência!");
-            }}
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '10px',
-              padding: '4px 8px',
-              fontSize: '0.7rem',
-              backgroundColor: 'var(--primary)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Copiar
-          </button>
-        </div>
-        <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-          <strong>Atenção:</strong> Nunca compartilhe este token com terceiros. Ele dá acesso total à sua conta.
-        </p>
-      </section>
     </div>
   );
 }
