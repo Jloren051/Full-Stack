@@ -84,7 +84,22 @@ export default function ProductList() {
               ) : (
                 products.map((product) => (
                   <tr key={product.id} className="table-row">
-                    <td style={{ fontWeight: 700, color: 'var(--text-main)' }}>{product.nome}</td>
+                    <td style={{ fontWeight: 700, color: 'var(--text-main)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        {product.imagem ? (
+                          <img 
+                            src={product.imagem} 
+                            alt={product.nome} 
+                            style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--border-light)' }} 
+                          />
+                        ) : (
+                          <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'var(--primary-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                          </div>
+                        )}
+                        <span>{product.nome}</span>
+                      </div>
+                    </td>
                     <td style={{ fontWeight: 600 }}>R$ {product.preco.toFixed(2)}</td>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

@@ -6,6 +6,8 @@ from src.Application.Controllers.seller_controller import SellerController
 from src.Application.Controllers.product_controller import ProductController
 from src.Application.Controllers.sale_controller import SaleController
 from src.Application.Controllers.dashboard_controller import DashboardController
+from src.Application.Controllers.upload_controller import UploadController
+from flask import send_from_directory, current_app
 
 def init_routes(app):
     @app.route('/api', methods=['GET'])
@@ -87,3 +89,11 @@ def init_routes(app):
     @jwt_required()
     def get_dashboard():
         return DashboardController.get_indicators()
+
+    @app.route("/api/upload", methods=["POST"])
+    def upload_file():
+        return UploadController.upload_image()
+
+    @app.route('/uploads/<path:filename>')
+    def serve_uploaded_file(filename):
+        return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
